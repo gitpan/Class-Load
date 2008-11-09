@@ -1,7 +1,10 @@
 --- 
-abstract: a working `require "Class::Name"` and more
+abstract: a working (require "Class::Name") and more
 author: 
-  - Shawn M Moore, C<< <sartak at gmail.com> >>
+  - Shawn M Moore, C<< <sartak at bestpractical.com> >>
+build_requires: 
+  Test::Exception: 0
+  Test::More: 0
 distribution_type: module
 generated_by: Module::Install version 0.70
 license: perl
@@ -13,4 +16,4 @@ no_index:
   directory: 
     - inc
     - t
-version: 0.01
+version: 0.02
