@@ -3,10 +3,11 @@ use strict;
 use warnings;
 use base 'Exporter';
 use File::Spec;
+use Scalar::Util 'reftype';
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
-our @EXPORT_OK = qw/load_class try_load_class is_class_loaded/;
+our @EXPORT_OK = qw/load_class load_optional_class try_load_class is_class_loaded/;
 our %EXPORT_TAGS = (
     all => \@EXPORT_OK,
 );
@@ -22,26 +23,60 @@ BEGIN {
 sub load_class {
     my $class = shift;
 
+    my ($res, $e) = try_load_class($class);
+    return 1 if $res;
+
+    require Carp;
+    Carp::croak $e;
+}
+
+sub load_optional_class {
+    my $class = shift;
+    # If success, then we report "Its there"
     return 1 if try_load_class($class);
+
+    # My testing says that if its in INC, the file definately exists
+    # on disk. In all versions of Perl. The value isn't reliable,
+    # but it existing is.
+    my $file = _mod2pm( $class );
+    return 0 unless exists $INC{$file};
 
     require Carp;
     Carp::croak $ERROR;
 }
 
-sub try_load_class {
+sub _mod2pm {
     my $class = shift;
-
-    undef $ERROR;
-
-    return 1 if is_class_loaded($class);
-
     # see rt.perl.org #19213
     my @parts = split '::', $class;
     my $file = $^O eq 'MSWin32'
              ? join '/', @parts
              : File::Spec->catfile(@parts);
     $file .= '.pm';
+    return $file;
+}
 
+sub try_load_class {
+    my $class = shift;
+
+    local $@;
+    undef $ERROR;
+
+    return 1 if is_class_loaded($class);
+
+    my $file = _mod2pm($class);
+    # This says "our diagnostics of the package
+    # say perl's INC status about the file being loaded are
+    # wrong", so we delete it from %INC, so when we call require(),
+    # perl will *actually* try reloading the file.
+    #
+    # If the file is already in %INC, it won't retry,
+    # And on 5.8, it won't fail either!
+    #
+    # The extra benefit of this trick, is it helps even on
+    # 5.10, as instead of dying with "Compilation failed",
+    # it will die with the actual error, and thats a win-win.
+    delete $INC{$file};
     return 1 if eval {
         local $SIG{__DIE__} = 'DEFAULT';
         require $file;
@@ -49,7 +84,8 @@ sub try_load_class {
     };
 
     $ERROR = $@;
-    return 0;
+    return 0 unless wantarray;
+    return 0, $@;
 }
 
 sub _is_valid_class_name {
@@ -102,8 +138,13 @@ sub is_class_loaded {
 
         # constant subs
         if ( IS_RUNNING_ON_5_10 ) {
-            return 1 if ref $glob eq 'SCALAR';
+            my $ref = ref($glob);
+            return 1 if $ref eq 'SCALAR' || $ref eq 'REF';
         }
+
+        # stubs
+        my $refref = ref(\$glob);
+        return 1 if $refref eq 'SCALAR';
 
         return 1 if defined *{$glob}{CODE};
     }
@@ -131,6 +172,10 @@ Class::Load - a working (require "Class::Name") and more
 
     is_class_loaded('Class::Name');
 
+    my $baseclass = load_optional_class('Class::Name::MightExist')
+        ? 'Class::Name::MightExist'
+        : 'Class::Name::Default';
+
 =head1 DESCRIPTION
 
 C<require EXPR> only accepts C<Class/Name.pm> style module names, not
@@ -157,9 +202,10 @@ will not try to load the class. This is useful when you have inner packages
 which C<require> does not check.
 
 =head2 try_load_class Class::Name -> 0|1
+=head2 try_load_class Class::Name -> (0|1, error message)
 
 Returns 1 if the class was loaded, 0 if it was not. If the class was not
-loaded, the error will be available in C<$Class::Load::ERROR>.
+loaded, the error will be returned as a second return value in list context.
 
 Again, if C<Class::Name> is already loaded (checked with C<is_class_loaded>)
 then it will not try to load the class. This is useful when you have inner
@@ -170,6 +216,26 @@ packages which C<require> does not check.
 This uses a number of heuristics to determine if the class C<Class::Name> is
 loaded. There heuristics were taken from L<Class::MOP>'s old pure-perl
 implementation.
+
+=head2 load_optional_class Class::Name -> 0|1
+
+C<load_optional_class> is a lot like C<try_load_class>, but also a lot like
+C<load_class>.
+
+If the class exists, and it works, then it will return 1.
+
+If the class doesn't exist, and it appears to not exist on disk either, it
+will return 0.
+
+If the class exists on disk, but loading from disk results in an error
+( ie: a syntax error ), then it will C<croak> with that error.
+
+This is useful for using if you want a fallback module system, ie:
+
+    my $class = load_optional_class($foo) ? $foo : $default;
+
+That way, if $foo does exist, but can't be loaded due to error, you won't
+get the behaviour of it simply not existing.
 
 =head1 SEE ALSO
 

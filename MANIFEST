@@ -15,5 +15,8 @@ t/000-load.t
 t/001-is-class-loaded.t
 t/002-try-load-class.t
 t/003-load-class.t
+t/004-load-double.t
+t/005-load-optional.t
+t/006-returned-error.t
 t/lib/Class/Load/OK.pm
 t/lib/Class/Load/SyntaxError.pm

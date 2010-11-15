@@ -1,5 +1,18 @@
 Revision history for Class-Load
 
+0.06    Mon Nov 15 13:35:37 EST 2010
+        BACK COMPAT CHANGE: Remove $Class::Load::ERROR in favor of a
+        contextual return value ( Jesse Luehrs )
+
+        Add load_optional_class($class) that fails only if
+        there is a problem with the attempted-to-load $class.
+        ( Kent Fredric )
+
+        Force internal require to try-again if we are SURE the class
+        is not there. This produces reliable errors. ( Kent Fredric )
+
+        Replace Test::Exception with Test::Fatal ( Kent Fredric )
+
 0.05    Wed Sep 2 06:18:13 EST 2009
         Cargo-cult Class::MOP's is_class_loaded so we work on 5.10
 
