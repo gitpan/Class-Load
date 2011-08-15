@@ -1,13 +1,54 @@
-use inc::Module::Install;
 
-name       'Class-Load';
-all_from   'lib/Class/Load.pm';
-repository 'http://github.com/bestpractical/class-load';
+use strict;
+use warnings;
 
-requires 'Scalar::Util';
 
-build_requires 'Test::More';
-build_requires 'Test::Fatal';
 
-WriteAll;
+use ExtUtils::MakeMaker 6.30;
+
+
+
+my %WriteMakefileArgs = (
+  'ABSTRACT' => 'a working (require "Class::Name") and more',
+  'AUTHOR' => 'Shawn M Moore <sartak at bestpractical.com>',
+  'BUILD_REQUIRES' => {
+    'Test::Fatal' => '0',
+    'Test::More' => '0.88'
+  },
+  'CONFIGURE_REQUIRES' => {
+    'ExtUtils::MakeMaker' => '6.30'
+  },
+  'DISTNAME' => 'Class-Load',
+  'EXE_FILES' => [],
+  'LICENSE' => 'perl',
+  'NAME' => 'Class::Load',
+  'PREREQ_PM' => {
+    'Scalar::Util' => '0'
+  },
+  'VERSION' => '0.07',
+  'test' => {
+    'TESTS' => 't/*.t'
+  }
+);
+
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+  my $pp = $WriteMakefileArgs{PREREQ_PM};
+  for my $mod ( keys %$br ) {
+    if ( exists $pp->{$mod} ) {
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
+    }
+    else {
+      $pp->{$mod} = $br->{$mod};
+    }
+  }
+}
+
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+WriteMakefile(%WriteMakefileArgs);
+
+
 

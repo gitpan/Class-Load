@@ -1,30 +1,49 @@
-Revision history for Class-Load
+0.07     2011-08-15
 
-0.06    Mon Nov 15 13:35:37 EST 2010
-        BACK COMPAT CHANGE: Remove $Class::Load::ERROR in favor of a
-        contextual return value ( Jesse Luehrs )
+- All this module's subroutines now accept optional parameters for a module so
+  you can write something like - load_class( 'Foo', { -version => 42 } )
 
-        Add load_optional_class($class) that fails only if
-        there is a problem with the attempted-to-load $class.
-        ( Kent Fredric )
+- There is now a Class::Load::XS distro available on CPAN which implements
+  some of this module's code in XS for speed. This code was originally written
+  by Goro Fuji and Florian Ragwitz for Class::MOP. You need to install this
+  distro explicitly if you want the XS implementation.
 
-        Force internal require to try-again if we are SURE the class
-        is not there. This produces reliable errors. ( Kent Fredric )
+- Added a load_first_existing_class subroutine based, mostly borrowed from
+  Class::MOP.
 
-        Replace Test::Exception with Test::Fatal ( Kent Fredric )
+- Fixed a bug where a package with a version object in its $VERSION would not
+  be seen as loaded. Reported by Chris Prather.
 
-0.05    Wed Sep 2 06:18:13 EST 2009
-        Cargo-cult Class::MOP's is_class_loaded so we work on 5.10
+0.06     2010-11-15
 
-0.04    Sun Nov 9 14:58:53 EST 2008
-        No changes
+- BACK COMPAT CHANGE: Remove $Class::Load::ERROR in favor of a contextual
+  return value. ( Jesse Luehrs )
 
-0.03    Sun Nov 9 14:55:26 EST 2008
-        Dist fix
+- Add load_optional_class($class) that fails only if there is a problem with
+  the attempted-to-load $class. ( Kent Fredric )
 
-0.02    Sun Nov 9 14:49:40 EST 2008
-        Declare dependency on Test::Exception
+- Force internal require to try-again if we are SURE the class is not
+  there. This produces reliable errors. ( Kent Fredric )
 
-0.01    Wed Aug 13 20:28:37 EDT 2008
-        First version, released on an unsuspecting world.
+- Replace Test::Exception with Test::Fatal ( Kent Fredric )
+
+0.05     2009-09-02
+
+- Cargo-cult Class::MOP's is_class_loaded so we work on 5.10
+
+0.04     2008-11-09
+
+- No changes
+
+0.03     2008-11-09
+
+- Dist fix
+
+0.02     2008-11-09
+
+- Declare dependency on Test::Exception
+
+0.01     2008-08-13
+
+- First version, released on an unsuspecting world.
 

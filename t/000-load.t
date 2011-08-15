@@ -1,7 +1,12 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 1;
+use Test::More 0.88;
 
-use_ok 'Class::Load';
+use lib 't/lib';
 
+use_ok 'Test::Class::Load';
+
+diag('Using ' . Class::Load->_implementation() . ' implementation' );
+
+done_testing;

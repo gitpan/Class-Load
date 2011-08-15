@@ -1,27 +1,22 @@
 ---
 abstract: "a working (require \"Class::Name\") and more"
 author:
-  - 'Shawn M Moore, C<< <sartak at bestpractical.com> >>'
+  - 'Shawn M Moore <sartak at bestpractical.com>'
 build_requires:
-  ExtUtils::MakeMaker: 6.42
   Test::Fatal: 0
-  Test::More: 0
+  Test::More: 0.88
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
-distribution_type: module
-generated_by: 'Module::Install version 1.00'
+  ExtUtils::MakeMaker: 6.30
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.200013, CPAN::Meta::Converter version 2.110930'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Class-Load
-no_index:
-  directory:
-    - inc
-    - t
 requires:
   Scalar::Util: 0
 resources:
-  license: http://dev.perl.org/licenses/
-  repository: http://github.com/bestpractical/class-load
-version: 0.06
+  bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Class-Load
+  repository: git://github.com/autarch/class-load.git
+version: 0.07
