@@ -23,9 +23,10 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'Class::Load',
   'PREREQ_PM' => {
+    'Data::OptList' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.07',
+  'VERSION' => '0.08',
   'test' => {
     'TESTS' => 't/*.t'
   }
