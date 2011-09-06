@@ -1,13 +1,13 @@
 package Class::Load;
 {
-  $Class::Load::VERSION = '0.08';
+  $Class::Load::VERSION = '0.09';
 }
 use strict;
 use warnings;
 use base 'Exporter';
 use Data::OptList 'mkopt';
-use File::Spec;
-
+use Package::Stash;
+use Try::Tiny;
 
 our $IMPLEMENTATION;
 
@@ -40,7 +40,8 @@ BEGIN {
     }
 
     my $impl = "Class::Load::$IMPLEMENTATION";
-    *is_class_loaded = $impl->can('is_class_loaded');
+    my $stash = Package::Stash->new(__PACKAGE__);
+    $stash->add_symbol('&is_class_loaded' => $impl->can('is_class_loaded'));
 
     sub _implementation {
         return $IMPLEMENTATION;
@@ -69,7 +70,7 @@ sub load_first_existing_class {
         or return;
 
     foreach my $class (@{$classes}) {
-        unless (_is_valid_class_name($class->[0])) {
+        unless (_is_module_name($class->[0])) {
             my $display = defined($class->[0]) ? $class->[0] : 'undef';
             _croak("Invalid class name ($display)");
         }
@@ -152,15 +153,22 @@ sub load_optional_class {
     _croak($ERROR);
 }
 
+# XXX Module::Runtime?
+sub _is_module_name {
+    my $name = shift;
+
+    return if !defined($name);
+    return if ref($name);
+    return $name =~ /\A[0-9A-Z_a-z]+(?:::[0-9A-Z_a-z]+)*\z/;
+}
+
 sub _mod2pm {
     my $class = shift;
-    # see rt.perl.org #19213
-    my @parts = split '::', $class;
-    my $file = $^O eq 'MSWin32'
-             ? join '/', @parts
-             : File::Spec->catfile(@parts);
-    $file .= '.pm';
-    return $file;
+
+    _croak("$class is not a module name")
+        unless _is_module_name($class);
+    $class =~ s+::+/+g;
+    return "$class.pm";
 }
 
 sub try_load_class {
@@ -175,11 +183,13 @@ sub try_load_class {
         # we want to return the error message for a failed version check, but
         # is_class_loaded just returns true/false.
         return 1 unless $options && defined $options->{-version};
-        return 1 if eval {
+        return try {
             $class->VERSION($options->{-version});
             1;
+        }
+        catch {
+            _error($_);
         };
-        return _error();
     }
 
     my $file = _mod2pm($class);
@@ -195,33 +205,22 @@ sub try_load_class {
     # 5.10, as instead of dying with "Compilation failed",
     # it will die with the actual error, and thats a win-win.
     delete $INC{$file};
-    return 1 if eval {
+    return try {
         local $SIG{__DIE__} = 'DEFAULT';
         require $file;
         $class->VERSION($options->{-version})
             if $options && defined $options->{-version};
         1;
+    }
+    catch {
+        _error($_);
     };
-
-    return _error();
-}
-
-sub _is_valid_class_name {
-    my $class = shift;
-
-    return 0 if ref($class);
-    return 0 unless defined($class);
-    return 0 unless length($class);
-
-    return 1 if $class =~ /^\w+(?:::\w+)*$/;
-
-    return 0;
 }
 
 sub _error {
-    $ERROR = $@;
+    $ERROR = shift;
     return 0 unless wantarray;
-    return 0, $@;
+    return 0, $ERROR;
 }
 
 sub _croak {
@@ -244,7 +243,7 @@ Class::Load - a working (require "Class::Name") and more
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -377,7 +376,7 @@ Shawn M Moore <sartak at bestpractical.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Shawn M More.
+This software is copyright (c) 2011 by Shawn M Moore.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

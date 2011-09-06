@@ -1,17 +1,13 @@
 package Class::Load::PP;
 {
-  $Class::Load::PP::VERSION = '0.08';
+  $Class::Load::PP::VERSION = '0.09';
 }
 
 use strict;
 use warnings;
+use Package::Stash;
 use Scalar::Util 'blessed', 'reftype';
-
-BEGIN {
-    *IS_RUNNING_ON_5_10 = ($] < 5.009_005)
-        ? sub () { 0 }
-        : sub () { 1 };
-}
+use Try::Tiny;
 
 sub is_class_loaded {
     my $class   = shift;
@@ -22,64 +18,39 @@ sub is_class_loaded {
     return $loaded if ! $loaded;
     return $loaded unless $options && $options->{-version};
 
-    return eval {
+    return try {
         $class->VERSION($options->{-version});
         1;
-    } ? 1 : 0;
+    }
+    catch {
+        0;
+    };
 }
 
 sub _is_class_loaded {
     my $class = shift;
 
-    return 0 unless Class::Load::_is_valid_class_name($class);
+    return 0 unless Class::Load::_is_module_name($class);
 
-    # walk the symbol table tree to avoid autovififying
-    # \*{${main::}{"Foo::"}} == \*main::Foo::
+    my $stash = Package::Stash->new($class);
 
-    my $pack = \*::;
-    foreach my $part (split('::', $class)) {
-        return 0 unless exists ${$$pack}{"${part}::"};
-        $pack = \*{${$$pack}{"${part}::"}};
+    if ($stash->has_symbol('$VERSION')) {
+        my $version = ${ $stash->get_symbol('$VERSION') };
+        if (defined $version) {
+            return 1 if ! ref $version;
+            # Sometimes $VERSION ends up as a reference to undef (weird)
+            return 1 if ref $version && reftype $version eq 'SCALAR' && defined ${$version};
+            # a version object
+            return 1 if blessed $version;
+        }
     }
 
-    # We used to check in the package stash, but it turns out that
-    # *{${$$package}{VERSION}{SCALAR}} can end up pointing to a
-    # reference to undef. It looks
-
-    my $version = do {
-        no strict 'refs';
-        ${$class . '::VERSION'};
-    };
-
-    if ( defined $version) {
-        return 1 if ! ref $version;
-        # Sometimes $VERSION ends up as a reference to undef (weird)
-        return 1 if ref $version && reftype $version eq 'SCALAR' && defined ${$version};
-        # a version object
-        return 1 if blessed $version;
+    if ($stash->has_symbol('@ISA')) {
+        return 1 if @{ $stash->get_symbol('@ISA') };
     }
-
-    return 1 if exists ${$$pack}{ISA}
-             && defined *{${$$pack}{ISA}}{ARRAY};
 
     # check for any method
-    foreach ( keys %{$$pack} ) {
-        next if substr($_, -2, 2) eq '::';
-
-        my $glob = ${$$pack}{$_} || next;
-
-        # constant subs
-        if ( IS_RUNNING_ON_5_10 ) {
-            my $ref = ref($glob);
-            return 1 if $ref eq 'SCALAR' || $ref eq 'REF';
-        }
-
-        # stubs
-        my $refref = ref(\$glob);
-        return 1 if $refref eq 'SCALAR';
-
-        return 1 if defined *{$glob}{CODE};
-    }
+    return 1 if $stash->list_all_symbols('CODE');
 
     # fail
     return 0;

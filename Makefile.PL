@@ -9,26 +9,28 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'a working (require "Class::Name") and more',
-  'AUTHOR' => 'Shawn M Moore <sartak at bestpractical.com>',
-  'BUILD_REQUIRES' => {
-    'Test::Fatal' => '0',
-    'Test::More' => '0.88'
+  "ABSTRACT" => "a working (require \"Class::Name\") and more",
+  "AUTHOR" => "Shawn M Moore <sartak at bestpractical.com>",
+  "BUILD_REQUIRES" => {
+    "Test::Fatal" => 0,
+    "Test::More" => "0.88"
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.30'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'Class-Load',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'Class::Load',
-  'PREREQ_PM' => {
-    'Data::OptList' => '0',
-    'Scalar::Util' => '0'
+  "DISTNAME" => "Class-Load",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Class::Load",
+  "PREREQ_PM" => {
+    "Data::OptList" => 0,
+    "Package::Stash" => "0.32",
+    "Scalar::Util" => 0,
+    "Try::Tiny" => 0
   },
-  'VERSION' => '0.08',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "0.09",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 
