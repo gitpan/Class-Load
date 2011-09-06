@@ -22,4 +22,4 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Class-Load
   repository: git://github.com/autarch/class-load.git
-version: 0.09
+version: 0.10
