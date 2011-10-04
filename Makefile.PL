@@ -24,11 +24,12 @@ my %WriteMakefileArgs = (
   "NAME" => "Class::Load",
   "PREREQ_PM" => {
     "Data::OptList" => 0,
+    "Module::Runtime" => "0.009",
     "Package::Stash" => "0.32",
     "Scalar::Util" => 0,
     "Try::Tiny" => 0
   },
-  "VERSION" => "0.10",
+  "VERSION" => "0.11",
   "test" => {
     "TESTS" => "t/*.t"
   }

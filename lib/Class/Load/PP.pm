@@ -1,10 +1,11 @@
 package Class::Load::PP;
 {
-  $Class::Load::PP::VERSION = '0.10';
+  $Class::Load::PP::VERSION = '0.11';
 }
 
 use strict;
 use warnings;
+use Module::Runtime 'is_module_name';
 use Package::Stash;
 use Scalar::Util 'blessed', 'reftype';
 use Try::Tiny;
@@ -30,7 +31,7 @@ sub is_class_loaded {
 sub _is_class_loaded {
     my $class = shift;
 
-    return 0 unless Class::Load::_is_module_name($class);
+    return 0 unless is_module_name($class);
 
     my $stash = Package::Stash->new($class);
 
