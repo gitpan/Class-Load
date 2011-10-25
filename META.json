@@ -22,7 +22,7 @@
       "runtime" : {
          "requires" : {
             "Data::OptList" : 0,
-            "Module::Runtime" : "0.009",
+            "Module::Runtime" : "0.011",
             "Package::Stash" : "0.32",
             "Scalar::Util" : 0,
             "Try::Tiny" : 0
@@ -47,6 +47,6 @@
          "web" : "https://github.com/autarch/class-load"
       }
    },
-   "version" : "0.11"
+   "version" : "0.12"
 }
 
