@@ -4,7 +4,7 @@
       "Shawn M Moore <sartak at bestpractical.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300002, CPAN::Meta::Converter version 2.112150",
+   "generated_by" : "Dist::Zilla version 4.300005, CPAN::Meta::Converter version 2.112150",
    "license" : [
       "perl_5"
    ],
@@ -31,7 +31,8 @@
       "test" : {
          "requires" : {
             "Test::Fatal" : 0,
-            "Test::More" : "0.88"
+            "Test::More" : "0.88",
+            "Test::Requires" : 0
          }
       }
    },
@@ -47,6 +48,6 @@
          "web" : "https://github.com/autarch/class-load"
       }
    },
-   "version" : "0.12"
+   "version" : "0.13"
 }
 

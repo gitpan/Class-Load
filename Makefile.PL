@@ -13,7 +13,8 @@ my %WriteMakefileArgs = (
   "AUTHOR" => "Shawn M Moore <sartak at bestpractical.com>",
   "BUILD_REQUIRES" => {
     "Test::Fatal" => 0,
-    "Test::More" => "0.88"
+    "Test::More" => "0.88",
+    "Test::Requires" => 0
   },
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
@@ -29,7 +30,7 @@ my %WriteMakefileArgs = (
     "Scalar::Util" => 0,
     "Try::Tiny" => 0
   },
-  "VERSION" => "0.12",
+  "VERSION" => "0.13",
   "test" => {
     "TESTS" => "t/*.t"
   }

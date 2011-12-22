@@ -1,13 +1,17 @@
 package Class::Load;
 {
-  $Class::Load::VERSION = '0.12';
+  $Class::Load::VERSION = '0.13';
 }
 use strict;
 use warnings;
 use base 'Exporter';
 use Data::OptList 'mkopt';
-use Module::Runtime qw(check_module_name module_notional_filename
-                       require_module use_module);
+use Module::Runtime 0.011 qw(
+    check_module_name
+    module_notional_filename
+    require_module
+    use_module
+);
 use Package::Stash;
 use Try::Tiny;
 
@@ -19,20 +23,25 @@ BEGIN {
 
     my $err;
     if ($IMPLEMENTATION) {
-        if (!try { require_module("Class::Load::$IMPLEMENTATION") }) {
-            require Carp;
-            Carp::croak("Could not load Class::Load::$IMPLEMENTATION: $@");
+        try {
+            require_module("Class::Load::$IMPLEMENTATION");
         }
+        catch {
+            require Carp;
+            Carp::croak("Could not load Class::Load::$IMPLEMENTATION: $_");
+        };
     }
     else {
         for my $impl ('XS', 'PP') {
-            if (try { require_module("Class::Load::$impl") }) {
+            try {
+                require_module("Class::Load::$impl");
                 $IMPLEMENTATION = $impl;
-                last;
             }
-            else {
-                $err .= $@;
-            }
+            catch {
+                $err .= $_;
+            };
+
+            last if $IMPLEMENTATION;
         }
     }
 
@@ -231,7 +240,7 @@ Class::Load - a working (require "Class::Name") and more
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 SYNOPSIS
 
