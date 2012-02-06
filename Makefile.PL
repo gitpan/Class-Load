@@ -14,7 +14,9 @@ my %WriteMakefileArgs = (
   "BUILD_REQUIRES" => {
     "Test::Fatal" => 0,
     "Test::More" => "0.88",
-    "Test::Requires" => 0
+    "Test::Requires" => 0,
+    "constant" => 0,
+    "version" => 0
   },
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
@@ -24,13 +26,19 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Class::Load",
   "PREREQ_PM" => {
+    "Carp" => 0,
     "Data::OptList" => 0,
+    "Exporter" => 0,
+    "Module::Implementation" => 0,
     "Module::Runtime" => "0.011",
-    "Package::Stash" => "0.32",
+    "Package::Stash" => 0,
     "Scalar::Util" => 0,
-    "Try::Tiny" => 0
+    "Try::Tiny" => 0,
+    "base" => 0,
+    "strict" => 0,
+    "warnings" => 0
   },
-  "VERSION" => "0.13",
+  "VERSION" => "0.14",
   "test" => {
     "TESTS" => "t/*.t"
   }
