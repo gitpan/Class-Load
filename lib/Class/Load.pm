@@ -1,12 +1,12 @@
 package Class::Load;
 {
-  $Class::Load::VERSION = '0.14';
+  $Class::Load::VERSION = '0.15';
 }
 use strict;
 use warnings;
 use base 'Exporter';
 use Data::OptList 'mkopt';
-use Module::Implementation;
+use Module::Implementation 0.04;
 use Module::Runtime 0.011 qw(
     check_module_name
     module_notional_filename
@@ -206,7 +206,7 @@ Class::Load - a working (require "Class::Name") and more
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 SYNOPSIS
 

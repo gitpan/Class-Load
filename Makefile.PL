@@ -29,7 +29,7 @@ my %WriteMakefileArgs = (
     "Carp" => 0,
     "Data::OptList" => 0,
     "Exporter" => 0,
-    "Module::Implementation" => 0,
+    "Module::Implementation" => "0.04",
     "Module::Runtime" => "0.011",
     "Package::Stash" => 0,
     "Scalar::Util" => 0,
@@ -38,7 +38,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.14",
+  "VERSION" => "0.15",
   "test" => {
     "TESTS" => "t/*.t"
   }
