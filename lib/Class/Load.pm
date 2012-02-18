@@ -1,6 +1,6 @@
 package Class::Load;
 {
-  $Class::Load::VERSION = '0.17';
+  $Class::Load::VERSION = '0.18';
 }
 use strict;
 use warnings;
@@ -13,7 +13,6 @@ use Module::Runtime 0.012 qw(
     require_module
     use_module
 );
-use Package::Stash;
 use Try::Tiny;
 
 {
@@ -210,7 +209,7 @@ Class::Load - a working (require "Class::Name") and more
 
 =head1 VERSION
 
-version 0.17
+version 0.18
 
 =head1 SYNOPSIS
 

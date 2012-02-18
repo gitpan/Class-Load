@@ -31,14 +31,14 @@ my %WriteMakefileArgs = (
     "Exporter" => 0,
     "Module::Implementation" => "0.04",
     "Module::Runtime" => "0.012",
-    "Package::Stash" => 0,
+    "Package::Stash" => "0.14",
     "Scalar::Util" => 0,
     "Try::Tiny" => 0,
     "base" => 0,
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.17",
+  "VERSION" => "0.18",
   "test" => {
     "TESTS" => "t/*.t"
   }

@@ -1,12 +1,12 @@
 package Class::Load::PP;
 {
-  $Class::Load::PP::VERSION = '0.17';
+  $Class::Load::PP::VERSION = '0.18';
 }
 
 use strict;
 use warnings;
 use Module::Runtime 'is_module_name';
-use Package::Stash;
+use Package::Stash 0.14;
 use Scalar::Util 'blessed', 'reftype';
 use Try::Tiny;
 

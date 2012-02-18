@@ -1,3 +1,8 @@
+0.18     2012-02-18
+
+- Require Package::Stash 0.14+. Fixes RT #75095. Reported by Zefram.
+
+
 0.17     2012-02-12
 
 - A bug in Class::Load caused test failures when Module::Runtime 0.012 was
