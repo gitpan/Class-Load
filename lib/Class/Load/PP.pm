@@ -1,6 +1,6 @@
 package Class::Load::PP;
 {
-  $Class::Load::PP::VERSION = '0.18';
+  $Class::Load::PP::VERSION = '0.19';
 }
 
 use strict;

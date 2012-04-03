@@ -1,3 +1,7 @@
+0.19     2012-04-03
+
+- No changes, reupload to fix indexing.
+
 0.18     2012-02-18
 
 - Require Package::Stash 0.14+. Fixes RT #75095. Reported by Zefram.
