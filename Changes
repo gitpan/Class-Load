@@ -1,22 +1,29 @@
-0.19     2012-04-03
+0.19     2012-07-15
 
-- No changes, reupload to fix indexing.
+- The load_class() subroutine now returns the class name on success. Requested
+  by Caleb Cushing. RT #76931.
+
+- Exceptions and errors from Class::Load no longer contain references to line
+  numbers in Class::Load or Module::Runtime. This applies to exceptions thrown
+  by load_class, load_first_existing_class, and load_optional_class, as well
+  as the error returned by try_load_class.
+
+- Exceptions are now croaked properly so they appear to come from the calling
+  code, not from an internal subroutine. This makes the exceptions look more
+  like the ones thrown by Perl's require. RT #68663.
 
 0.18     2012-02-18
 
 - Require Package::Stash 0.14+. Fixes RT #75095. Reported by Zefram.
-
 
 0.17     2012-02-12
 
 - A bug in Class::Load caused test failures when Module::Runtime 0.012 was
   used with Perl 5.8.x. Reported by Zefram. RT #74897. ( Jesse Luehrs )
 
-
 0.16     2012-02-12
 
 - Require Module::Runtime 0.012, which has a number of useful bug fixes.
-
 
 0.15     2012-02-08
 

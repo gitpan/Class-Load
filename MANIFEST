@@ -22,6 +22,7 @@ t/009-invalid-module-name.t
 t/010-isa-false-positive.t
 t/011-without-xs.t
 t/012-without-implementation.t
+t/013-errors.t
 t/lib/Class/Load/Error/DieAfterBeginIsa.pm
 t/lib/Class/Load/Error/DieAfterIsa.pm
 t/lib/Class/Load/Error/SyntaxErrorAfterIsa.pm
@@ -36,6 +37,7 @@ t/release-cpan-changes.t
 t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-coverage.t
+t/release-pod-linkcheck.t
 t/release-pod-no404s.t
 t/release-pod-spell.t
 t/release-pod-syntax.t
