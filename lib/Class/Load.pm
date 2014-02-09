@@ -1,7 +1,9 @@
 package Class::Load;
-{
-  $Class::Load::VERSION = '0.20';
+BEGIN {
+  $Class::Load::AUTHORITY = 'cpan:SARTAK';
 }
+# git description: v0.20-8-gc4c6e08
+$Class::Load::VERSION = '0.21';
 use strict;
 use warnings;
 use base 'Exporter';
@@ -166,7 +168,7 @@ sub try_load_class {
     #
     # The extra benefit of this trick, is it helps even on
     # 5.10, as instead of dying with "Compilation failed",
-    # it will die with the actual error, and thats a win-win.
+    # it will die with the actual error, and that's a win-win.
     delete $INC{$file};
     return try {
         local $SIG{__DIE__} = 'DEFAULT';
@@ -204,9 +206,11 @@ sub _croak {
 
 # ABSTRACT: a working (require "Class::Name") and more
 
-
+__END__
 
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -214,7 +218,7 @@ Class::Load - a working (require "Class::Name") and more
 
 =head1 VERSION
 
-version 0.20
+version 0.21
 
 =head1 SYNOPSIS
 
@@ -309,7 +313,7 @@ If the class doesn't exist, and it appears to not exist on disk either, it
 will return 0.
 
 If the class exists on disk, but loading from disk results in an error
-( i.e.: a syntax error ), then it will C<croak> with that error.
+(e.g.: a syntax error), then it will C<croak> with that error.
 
 This is useful for using if you want a fallback module system, i.e.:
 
@@ -349,14 +353,9 @@ Shawn M Moore <sartak at bestpractical.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Shawn M Moore.
+This software is copyright (c) 2008 by Shawn M Moore.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-
-

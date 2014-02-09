@@ -1,8 +1,8 @@
 package Class::Load::PP;
-{
-  $Class::Load::PP::VERSION = '0.20';
+BEGIN {
+  $Class::Load::PP::AUTHORITY = 'cpan:SARTAK';
 }
-
+$Class::Load::PP::VERSION = '0.21';
 use strict;
 use warnings;
 use Module::Runtime 'is_module_name';
@@ -58,3 +58,7 @@ sub _is_class_loaded {
 }
 
 1;
+
+=for Pod::Coverage is_class_loaded
+
+=cut
