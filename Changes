@@ -1,5 +1,9 @@
 Revision history for Class-Load
 
+0.22     2014-08-16
+    - document some of the caveats to using this module, and refer to
+      Module::Runtime as an alternative
+
 0.21     2014-02-09
     - repository moved to the github moose organization
 
